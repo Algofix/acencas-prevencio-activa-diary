@@ -861,6 +861,7 @@
                 const sections = {
                     manual_intro: { title: "El meu manual", icon: "book-open", content: getManualIntroContent, type: 'manual' },
                     partida: { title: "Punt de partida", icon: "flag", content: getPartidaContent, type: 'manual' },
+                    diary: { title: "El meu diari", icon: "book-open", content: getDiaryContent, type: 'tool' },
                     patrons: { title: "Comprenent patrons", icon: "map", content: getPatronsContent, type: 'manual' },
                     eines: { title: "Caixa d'eines", icon: "box", content: getEinesContent, type: 'manual' },
                     suport: { title: "Sistema de suport", icon: "users", content: getSupportContent, type: 'manual' },
@@ -974,6 +975,36 @@
                     </div>
                 `;
             }
+
+
+function getDiaryContent() {
+    return `
+    <div class="section-content">
+        <h1 class="section-title" data-translate="section_title_diary">El meu diari</h1>
+        
+        <div class="card mb-6">
+            <h2 class="text-2xl font-semibold mb-4 flex items-center gap-3">
+                <i data-lucide="book-open" class="text-orange-500"></i>
+                <span>¿Cómo te sientes hoy? / Com et sents avui?</span>
+            </h2>
+            
+            <div class="mb-4">
+                <textarea id="diary-entry-textarea" rows="5" class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all resize-none" placeholder="Escribe aquí tus pensamientos..."></textarea>
+            </div>
+            
+            <div class="flex justify-end mb-8">
+                <button id="save-diary-entry-button" class="btn-primary px-6">Guardar / Desa</button>
+            </div>
+            
+            <h3 class="text-xl font-semibold text-slate-800 mb-4 border-b pb-2">Entradas anteriores</h3>
+            <div id="diary-history-container" class="space-y-4">
+                <p class="text-slate-500 italic text-sm" id="empty-diary-msg">Aún no hay entradas guardadas.</p>
+            </div>
+        </div>
+        ${getSectionFooter('diary')}
+    </div>
+    `;
+}
 
             function getPatronsContent() {
                 return `
@@ -1312,6 +1343,8 @@
                         }
                     });
                 }
+
+            
                 
                 // Values
                 renderValues();
