@@ -1329,26 +1329,40 @@ function getDiaryContent() {
                 if (!currentUserId || !activeManualId) return;
                 const manualDocRef = doc(db, "users", currentUserId, "manuals", activeManualId);
 
-                // Diari
-                const saveDiaryButton = document.getElementById('save-diary-entry-button');
-                if (saveDiaryButton) {
-                    renderDiaryEntries();
-                    saveDiaryButton.onclick = async () => {
-                        const textarea = document.getElementById('diary-entry-textarea');
-                        const text = textarea.value.trim();
-                        if (text) {
-                            try {
-                                await addDoc(collection(db, `users/${currentUserId}/diaryEntries`), {
-                                    text: text,
-                                    createdAt: serverTimestamp()
-                                });
-                                textarea.value = '';
-                            } catch (error) {
-                                console.error("Error afegint l'entrada del diari:", error);
-                            }
-                        }
-                    };
-                }
+              // Diari
+    // 1. Render previous entries immediately
+    if (typeof renderDiaryEntries === 'function') {
+        renderDiaryEntries();
+    }
+
+    // 2. Use Event Delegation so the button always works, even if duplicated or drawn late
+    document.removeEventListener('click', window.handleDiarySave); // Prevent duplicate saves
+    window.handleDiarySave = async (event) => {
+        const clickedButton = event.target.closest('#save-diary-entry-button');
+        
+        // If the click wasn't on our save button, ignore it completely
+        if (!clickedButton) return; 
+
+        const textarea = document.getElementById('diary-entry-textarea');
+        if (!textarea) return;
+
+        const text = textarea.value.trim();
+        if (text) {
+            try {
+                await addDoc(collection(db, `users/${currentUserId}/diaryEntries`), {
+                    text: text,
+                    createdAt: serverTimestamp()
+                });
+                
+                textarea.value = ''; // Clear the text box after saving
+                renderDiaryEntries(); // Instantly refresh the screen to show the new entry
+                
+            } catch (error) {
+                console.error("Error afegint l'entrada del diari:", error);
+            }
+        }
+    };
+    document.addEventListener('click', window.handleDiarySave);
 
                 // Motivations
                 const addMotivationButton = document.getElementById('add-motivation-button');
