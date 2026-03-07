@@ -91,26 +91,22 @@ if (authForm) {
   });
 }
 
-// 7. Security Guard (Checks if already logged in)
+// 7. Security Guard (This runs automatically when someone logs in)
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    console.log("Welcome back:", user.email);
-    
-    // 1. Hide the login page
-    if (loginPage) loginPage.style.display = 'none'; 
-    
-    // 2. Smart auto-click: Tries 'manual_intro', then 'manual', then defaults to the first available button
-    const defaultButton = document.querySelector('[data-page="manual_intro"]') || 
-                          document.querySelector('[data-page="manual"]') || 
-                          document.querySelector('[data-page]'); 
-                          
-    if (defaultButton) {
-        defaultButton.click();
+    // 1. Hide the login screen
+    if (loginPage) {
+        loginPage.style.display = 'none';
     }
 
+    // 2. Call the "Bridge" function we just put in index.html
+    if (typeof window.startApp === "function") {
+        window.startApp(user);
+    }
   } else {
-    console.log("No user logged in currently.");
-    // Make sure login page is visible if they aren't logged in
-    if (loginPage) loginPage.style.display = 'flex'; 
+    // If no one is logged in, show the login screen
+    if (loginPage) {
+        loginPage.style.display = 'flex';
+    }
   }
 });

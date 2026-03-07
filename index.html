@@ -566,7 +566,33 @@
             });
         }
 
+// --- 1. ADD THIS NEW BRIDGE FUNCTION AT THE TOP ---
+window.startApp = function(user) {
+    console.log("Firebase verified user:", user.email);
+    // This tells your app to load the first section automatically
+    if (typeof showSection === 'function') {
+        showSection('manual_intro'); 
+    }
+    // This tells your app to draw the sidebar menu
+    if (typeof renderSidebar === 'function') {
+        renderSidebar();
+    }
+};
 
+// --- 2. YOUR EXISTING START LINE ---
+document.addEventListener('DOMContentLoaded', () => {
+    window.startApp = function(user) {
+    console.log("Firebase verified user:", user.email);
+    // This tells your app to load the first section automatically
+    if (typeof showSection === 'function') {
+        showSection('manual_intro'); 
+    }
+    // This tells your app to draw the sidebar menu
+    if (typeof renderSidebar === 'function') {
+        renderSidebar();
+    }
+};
+    // ... keep all your existing variables (currentUserId, appData, etc.) here ...
         // --- Espera que el DOM estigui completament carregat per executar el codi ---
         document.addEventListener('DOMContentLoaded', () => {
             // --- Variables Globals ---
