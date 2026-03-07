@@ -579,32 +579,27 @@ window.startApp = function(user) {
     }
 };
 
-// --- 2. YOUR EXISTING START LINE ---
-document.addEventListener('DOMContentLoaded', () => {
-    window.startApp = function(user) {
-    console.log("Firebase verified user:", user.email);
-    // This tells your app to load the first section automatically
-    if (typeof showSection === 'function') {
-        showSection('manual_intro'); 
-    }
-    // This tells your app to draw the sidebar menu
-    if (typeof renderSidebar === 'function') {
-        renderSidebar();
-    }
-};
-    // ... keep all your existing variables (currentUserId, appData, etc.) here ...
-        // --- Espera que el DOM estigui completament carregat per executar el codi ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Variables Globals ---
-            let currentUserId = null;
-            let activeManualId = null;
-            let userDataUnsubscribe; 
-            let diaryUnsubscribe;
-            let appData = {};
-            let isLoginMode = true; // Controla si estem en mode login o registre
-            const allValues = ['Honestedat', 'Connexió', 'Respecte', 'Creativitat', 'Aprenentatge', 'Salut', 'Seguretat', 'Aventura', 'Compassió', 'Llibertat', 'Família', 'Amistat', 'Creixement', 'Pau interior', 'Diversió'];
-            const manualSectionsOrder = ['manual_intro', 'partida', 'patrons', 'eines', 'suport', 'futur', 'diari'];
+// ... keep all your existing variables (currentUserId, appData, etc.) here ...
+     // --- Variables Globals (Global Scope) ---
+let currentUserId = null;
+let activeManualId = null;
+let userDataUnsubscribe; 
+let diaryUnsubscribe;
+let appData = {};
+let isLoginMode = true; 
+const allValues = ['Honestedat', 'Connexió', 'Respecte', 'Creativitat', 'Aprenentatge', 'Salut', 'Seguretat', 'Aventura', 'Compassió', 'Llibertat', 'Família', 'Amistat', 'Creixement', 'Pau interior', 'Diversió'];
+const manualSectionsOrder = ['manual_intro', 'partida', 'patrons', 'eines', 'suport', 'futur', 'diari'];
 
+// --- Bridge Function ---
+window.startApp = function(user) {
+    currentUserId = user.uid; 
+    console.log("App starting for:", currentUserId);
+    if (typeof showSection === 'function') showSection('manual_intro'); 
+    if (typeof renderSidebar === 'function') renderSidebar();
+};
+
+// --- Main App Logic ---
+document.addEventListener('DOMContentLoaded', () => {
             // --- Elements del DOM d'Autenticació ---
             const authForm = document.getElementById('auth-form');
             const authEmailInput = document.getElementById('auth-email');
