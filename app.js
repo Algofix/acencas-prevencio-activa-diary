@@ -95,9 +95,22 @@ if (authForm) {
 onAuthStateChanged(auth, (user) => {
   if (user) {
     console.log("Welcome back:", user.email);
-    // If they already logged in previously, hide the login page immediately
+    
+    // 1. Hide the login page
     if (loginPage) loginPage.style.display = 'none'; 
+    
+    // 2. Smart auto-click: Tries 'manual_intro', then 'manual', then defaults to the first available button
+    const defaultButton = document.querySelector('[data-page="manual_intro"]') || 
+                          document.querySelector('[data-page="manual"]') || 
+                          document.querySelector('[data-page]'); 
+                          
+    if (defaultButton) {
+        defaultButton.click();
+    }
+
   } else {
     console.log("No user logged in currently.");
+    // Make sure login page is visible if they aren't logged in
+    if (loginPage) loginPage.style.display = 'flex'; 
   }
 });
