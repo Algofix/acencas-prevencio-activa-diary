@@ -1337,29 +1337,44 @@ function getDiaryContent() {
 
     // 2. Use Event Delegation so the button always works, even if duplicated or drawn late
     document.removeEventListener('click', window.handleDiarySave); // Prevent duplicate saves
-    window.handleDiarySave = async (event) => {
+ window.handleDiarySave = async (event) => {
         const clickedButton = event.target.closest('#save-diary-entry-button');
         
-        // If the click wasn't on our save button, ignore it completely
+        // GATE 1: Did we even click the button?
         if (!clickedButton) return; 
+        console.log("Gate 1: Button click detected!");
 
         const textarea = document.getElementById('diary-entry-textarea');
-        if (!textarea) return;
+        if (!textarea) {
+            alert("Error: No s'ha trobat el quadre de text (textarea).");
+            return;
+        }
 
         const text = textarea.value.trim();
-        if (text) {
-            try {
-                await addDoc(collection(db, `users/${currentUserId}/diaryEntries`), {
-                    text: text,
-                    createdAt: serverTimestamp()
-                });
-                
-                textarea.value = ''; // Clear the text box after saving
-                renderDiaryEntries(); // Instantly refresh the screen to show the new entry
-                
-            } catch (error) {
-                console.error("Error afegint l'entrada del diari:", error);
-            }
+        // GATE 2: Is there actual text to save?
+        if (!text) {
+            alert("Si us plau, escriu alguna cosa abans de guardar.");
+            return;
+        }
+
+        try {
+            console.log("Gate 3: Attempting Firebase save for user:", currentUserId);
+            
+            await addDoc(collection(db, `users/${currentUserId}/diaryEntries`), {
+                text: text,
+                createdAt: serverTimestamp()
+            });
+            
+            // THE VICTORY POPUP
+            alert("ÈXIT: Entrada guardada correctament!");
+            
+            textarea.value = ''; 
+            renderDiaryEntries(); 
+            
+        } catch (error) {
+            // THE ERROR POPUP
+            alert("ERROR de Firebase: " + error.message);
+            console.error("Error detallat:", error);
         }
     };
     document.addEventListener('click', window.handleDiarySave);
