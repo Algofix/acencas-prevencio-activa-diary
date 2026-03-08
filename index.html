@@ -1344,13 +1344,17 @@ function getDiaryContent() {
         if (!clickedButton) return; 
         console.log("Gate 1: Button click detected!");
 
-        const textarea = document.getElementById('active-diary-input');
+        // Instead of searching by ID, find the box in the same container as the button
+        const container = clickedButton.closest('div, section, .card');
+        const textarea = container ? container.querySelector('textarea') : null;
+
         if (!textarea) {
-            alert("Error: No s'ha trobat el quadre de text (active-diary-input).");
+            alert("Error: No s'ha trobat cap quadre de text a prop d'aquest botó.");
             return;
         }
 
-        // THE SLEDGEHAMMER: Try every way to find the text
+        const text = textarea.value.trim();
+        console.log("Contextual Fix - Text found:", text);
         const text = (textarea.value || textarea.textContent || textarea.innerText || "").trim();
         const text = (textarea.value || textarea.textContent || textarea.innerText || "").trim();
         
