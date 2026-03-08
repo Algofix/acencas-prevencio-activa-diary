@@ -1346,11 +1346,14 @@ function getDiaryContent() {
 
         const textarea = document.getElementById('active-diary-input');
         if (!textarea) {
-            alert("Error: No s'ha trobat el quadre de text (textarea).");
+            alert("Error: No s'ha trobat el quadre de text (active-diary-input).");
             return;
         }
 
-        const text = textarea.value.trim();
+        // Try every possible way to read the text inside the box
+        const text = (textarea.value || textarea.textContent || textarea.innerText || "").trim();
+        
+        console.log("Debug - Text detected by JS:", text);
         // GATE 2: Is there actual text to save?
         if (!text) {
             alert("Si us plau, escriu alguna cosa abans de guardar.");
