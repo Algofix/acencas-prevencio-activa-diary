@@ -1350,7 +1350,8 @@ function getDiaryContent() {
             return;
         }
 
-        // Try every possible way to read the text inside the box
+        // THE SLEDGEHAMMER: Try every way to find the text
+        const text = (textarea.value || textarea.textContent || textarea.innerText || "").trim();
         const text = (textarea.value || textarea.textContent || textarea.innerText || "").trim();
         
         console.log("Debug - Text detected by JS:", text);
