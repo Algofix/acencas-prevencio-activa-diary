@@ -1353,9 +1353,6 @@ function getDiaryContent() {
             return;
         }
 
-        const text = textarea.value.trim();
-        console.log("Contextual Fix - Text found:", text);
-        const text = (textarea.value || textarea.textContent || textarea.innerText || "").trim();
         const text = (textarea.value || textarea.textContent || textarea.innerText || "").trim();
         
         console.log("Debug - Text detected by JS:", text);
